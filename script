@@ -1,0 +1,154 @@
+const startBtnElem = document.querySelector("#start");
+const hitBtnElem = document.querySelector("#hit");
+const stayBtnElem = document.querySelector("#stay");
+const newGameElem=document.querySelector('#new_game')
+
+function disableBtns() {
+  startBtnElem.setAttribute("disabled", "true")
+  hitBtnElem.setAttribute("disabled", "true")
+  stayBtnElem.setAttribute("disabled", "true")
+  newGameElem.setAttribute("disabled", "true")
+}
+
+function getRandom() {
+  return Math.floor(Math.random() * 11) + 1
+}
+
+let dealersHand;
+let playersHand;
+
+function startGame() {
+  console.log(dealersHand = [getRandom(), getRandom()])
+  playersHand = [getRandom(), getRandom()]
+
+  if (playersHand===21) {
+    alert("You have blackjack!")
+    hitBtnElem.disabled=true
+    startBtnElem.disabled=true
+    stayBtnElem.disabled=true
+  }
+}
+
+function addPlayersCards(playersHand) {
+  for (let i = 0; i < playersHand.length; i++) {
+    playerstotal += playersHand[i]
+  }
+  return playerstotal
+}
+let playerstotal = 0
+
+
+startBtnElem.addEventListener("click", function (e) {
+  e.preventDefault();
+  
+  startGame();
+  addPlayersCards(playersHand)
+
+  document.querySelector("#player_cards").innerText = playersHand
+  if (playerstotal===21){
+    alert("You have blackjack, you win!")
+  }
+  document.querySelector("#dealer_cards").innerText = dealersHand[0]
+  document.querySelector("#player_total").innerText = playerstotal
+});
+
+function hit() {
+  playersHand.push(getRandom())
+}
+
+
+function playerFinal() {
+  let playerFinalCards = 0
+  for (let i = 0; i < playersHand.length; i++) {
+    playerFinalCards += playersHand[i]
+  }
+
+  return playerFinalCards
+}
+
+hitBtnElem.addEventListener("click", function (e) {
+  e.preventDefault();
+  hit()
+  
+  document.querySelector("#player_total").innerText = playerFinal()
+
+  document.querySelector("#player_cards").innerText = playersHand
+  if (playerFinal()>21) {
+    alert("You Bust!")
+    hitBtnElem.disabled=true
+    startBtnElem.disabled=true
+    stayBtnElem.disabled=true
+  }
+  if (playerFinal()===21) {
+    alert("You have blackjack!")
+    hitBtnElem.disabled=true
+    startBtnElem.disabled=true
+    stayBtnElem.disabled=true
+  }
+
+})
+
+function stay() {
+  for (let i =0; i<5; i++) {
+  dealersHand.push(getRandom(i))
+  }
+}
+
+function dealerFinal() {
+let total=[]
+  for (let i = 0; i < dealersHand.length; i++) {
+    finalCards+=dealersHand[i]
+    total.push(dealersHand[i])
+    document.querySelector("#dealer_cards").innerText = total
+
+    if (finalCards >= 17) {
+
+      break
+    }
+    
+  }
+
+  return finalCards
+}
+let finalCards = 0
+
+stayBtnElem.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  stay()
+
+  document.querySelector("#dealer_total").innerText = dealerFinal()
+
+  if (finalCards>21) {
+    alert("Dealer busts, you win!")
+    hitBtnElem.disabled=true
+    startBtnElem.disabled=true
+    stayBtnElem.disabled=true
+  }
+  if (finalCards<=21 && finalCards>playerFinal()) {
+    alert("Dealer wins!")
+    hitBtnElem.disabled=true
+    startBtnElem.disabled=true
+    stayBtnElem.disabled=true
+  }
+
+ if (playerFinal()<=21 && playerFinal()>finalCards) {
+   alert("You win!")
+   hitBtnElem.disabled=true
+   startBtnElem.disabled=true
+   stayBtnElem.disabled=true
+ } 
+
+ if (finalCards===playerFinal()) {
+   alert("It's a tie")
+   hitBtnElem.disabled=true
+   startBtnElem.disabled=true
+   stayBtnElem.disabled=true
+ }
+})
+
+newGameElem.addEventListener("click", function (e){
+  e.preventDefault();
+
+  location.reload()
+})
